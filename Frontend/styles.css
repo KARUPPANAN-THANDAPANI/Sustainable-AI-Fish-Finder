@@ -1,0 +1,152 @@
+/* Base styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+header {
+  background-color: #004d66;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 80px);
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 300px;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+}
+
+.sidebar h2,
+.sidebar h3 {
+  margin-top: 0;
+  color: #004d66;
+}
+
+.sidebar label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.sidebar select,
+.sidebar input[type="date"],
+.sidebar textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.sidebar button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #004d66;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background-color: #006080;
+}
+
+/* Map area styles */
+.map-area {
+  flex-grow: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+}
+
+/* Prediction summary */
+#summary {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-left: 4px solid #004d66;
+}
+
+#summary h3 {
+  margin-top: 0;
+  color: #004d66;
+}
+
+/* Feedback section */
+#feedback-section {
+  margin-top: 2rem;
+}
+
+#feedback-form label {
+  font-weight: bold;
+}
+
+#feedback-form textarea {
+  resize: vertical;
+}
+
+#feedback-response {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
+}
+
+/* Legend styling */
+.info.legend {
+  background: white;
+  padding: 6px 8px;
+  font-size: 14px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  line-height: 18px;
+}
+
+.info.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .map-area {
+    padding: 0.5rem;
+  }
+
+  #map {
+    height: 300px;
+  }
+}

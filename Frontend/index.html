@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sustainable AI Fish Finder</title>
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!--Leaflet EasyPrint for PNG export-->
+  <script src="https://rawcdn.githack.com/rowanwins/leaflet-easyPrint/2.1.9/dist/bundle.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Sustainable AI Fish Finder</h1>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Input Parameters</h2>
+      <form id="input-form">
+        <label for="region">Select Region:</label>
+        <select id="region">
+          <option value="chennai">Chennai</option>
+          <option value="tuticorin">Tuticorin</option>
+          <option value="rameswaram">Rameswaram</option>
+          <option value="puducherry">Puducherry</option>
+          <option value="cuddalore">Cuddalore</option>
+          <option value="nagapattinam">Nagapattinam</option>
+          <option value="kanyakumari">Kanyakumari</option>
+          <option value="chidambaram">Chidambaram</option>
+          <option value="mahabalipuram">Mahabalipuram</option>
+          <option value="bay_of_bengal">Bay of Bengal</option>
+          <option value="arabian_sea">Arabian Sea</option>
+        </select>
+
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" />
+
+        <button type="submit">Get Prediction</button>
+      </form>
+    </aside>
+
+    <main class="map-area">
+      <div id="map">Map will load here...</div>
+      <div id="summary"></div>
+      <div id="feedback-section">
+        <h3>Feedback</h3>
+        <form id="feedback-form">
+          <label>Was this Prediction useful?</label><br>
+          <input type="radio" name="useful" value="yes" required> yes
+          <input type="radio" name="useful" value="no" required> no<br><br>
+          <label for="comments">Comments (optional):</label><br>
+          <textarea id="comments" rows="3" cols="30"></textarea><br><br>
+          <button type="submit">Submit Feedback</button>
+        </form>
+        <div id="feedback-response"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
