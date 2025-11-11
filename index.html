@@ -1,234 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Fish Finder - Sustainable Fishing</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-        }
-        .container {
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 300px;
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            overflow-y: auto;
-        }
-        .map-container {
-            flex: 1;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        .zone-legend {
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin: 5px 0;
-        }
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            border-radius: 3px;
-        }
-        .prediction-result {
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin: 5px 0;
-        }
-        button:hover {
-            background: #45a049;
-        }
-        .ocean-data {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sustainable AI Fish Finder</title>
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!--Leaflet EasyPrint for PNG export-->
+  <script src="https://rawcdn.githack.com/rowanwins/leaflet-easyPrint/2.1.9/dist/bundle.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h1>🎣 AI Fish Finder</h1>
-            <p><em>Smart Fishing with Satellite AI</em></p>
-            
-            <div class="ocean-data">
-                <h3>🌊 Live Ocean Conditions</h3>
-                <p>Temperature: <strong id="currentTemp">{{ ocean_data.sea_temperature }}°C</strong></p>
-                <p>Chlorophyll: <strong>{{ ocean_data.chlorophyll }} mg/m³</strong></p>
-                <p>Region: <strong>{{ ocean_data.region_name }}</strong></p>
-                <p style="font-size: 12px; opacity: 0.8;">
-                    Source: {{ ocean_data.data_source }}<br>
-                    Updated: {{ ocean_data.timestamp }}
-                </p>
-                <button onclick="updateOceanData()" style="background: #2196F3; margin-top: 10px;">
-                    🔄 Update Satellite Data
-                </button>
-            </div>
+  <header>
+    <h1>Sustainable AI Fish Finder</h1>
+  </header>
 
-            <div class="zone-legend">
-                <h3>🎯 Fishing Zones</h3>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: red;"></div>
-                    <span>High Probability (70-100%)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: yellow;"></div>
-                    <span>Medium Probability (40-70%)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: green;"></div>
-                    <span>Low Probability (0-40%)</span>
-                </div>
-            </div>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Input Parameters</h2>
+      <form id="input-form">
+        <label for="region">Select Region:</label>
+        <select id="region">
+          <option value="chennai">Chennai</option>
+          <option value="tuticorin">Tuticorin</option>
+          <option value="rameswaram">Rameswaram</option>
+          <option value="puducherry">Puducherry</option>
+          <option value="cuddalore">Cuddalore</option>
+          <option value="nagapattinam">Nagapattinam</option>
+          <option value="kanyakumari">Kanyakumari</option>
+          <option value="chidambaram">Chidambaram</option>
+          <option value="mahabalipuram">Mahabalipuram</option>
+          <option value="bay_of_bengal">Bay of Bengal</option>
+          <option value="arabian_sea">Arabian Sea</option>
+        </select>
 
-            <div class="prediction-result" id="predictionResult">
-                <h3>🔍 Click on map for prediction</h3>
-                <p>Click any location on the map to get AI fishing prediction</p>
-            </div>
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" />
 
-            <button onclick="refreshZones()">🔄 Update Fishing Zones</button>
-            <button onclick="locateBestZone()">📍 Find Best Fishing Spot</button>
-        </div>
+        <button type="submit">Get Prediction</button>
+      </form>
+    </aside>
 
-        <div class="map-container">
-            <div id="map"></div>
-        </div>
-    </div>
+    <main class="map-area">
+      <div id="map">Map will load here...</div>
+      <div id="summary"></div>
+      <div id="feedback-section">
+        <h3>Feedback</h3>
+        <form id="feedback-form">
+          <label>Was this Prediction useful?</label><br>
+          <input type="radio" name="useful" value="yes" required> yes
+          <input type="radio" name="useful" value="no" required> no<br><br>
+          <label for="comments">Comments (optional):</label><br>
+          <textarea id="comments" rows="3" cols="30"></textarea><br><br>
+          <button type="submit">Submit Feedback</button>
+        </form>
+        <div id="feedback-response"></div>
+      </div>
+    </main>
+  </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        // Initialize map
-        var map = L.map('map').setView([10, 85], 6);
-        
-        // Add satellite map layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        var fishingZones = [];
-        var markers = [];
-
-        // Load fishing zones
-        function loadFishingZones() {
-            fetch('/zones')
-                .then(function(response) { return response.json(); })
-                .then(function(zones) {
-                    // Clear existing markers
-                    markers.forEach(function(marker) { map.removeLayer(marker); });
-                    markers = [];
-                    fishingZones = zones;
-                    
-                    // Add new zones
-                    zones.forEach(function(zone) {
-                        var marker = L.circleMarker([zone.lat, zone.lon], {
-                            color: zone.color,
-                            fillColor: zone.color,
-                            fillOpacity: 0.6,
-                            radius: 15
-                        }).addTo(map);
-                        
-                        marker.bindPopup(
-                            '<strong>Fishing Zone</strong><br>' +
-                            'Probability: ' + zone.probability + '%<br>' +
-                            'Type: ' + zone.type
-                        );
-                        
-                        markers.push(marker);
-                    });
-                });
-        }
-
-        // Map click event for predictions
-        map.on('click', function(e) {
-            var lat = e.latlng.lat;
-            var lng = e.latlng.lng;
-            var currentTemp = parseFloat(document.getElementById('currentTemp').textContent);
-            
-            fetch('/predict', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    latitude: lat,
-                    longitude: lng,
-                    sea_temperature: currentTemp,
-                    chlorophyll: 0.4
-                })
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                if (data.error) {
-                    document.getElementById('predictionResult').innerHTML = 
-                        '<h3>❌ Error</h3>' +
-                        '<p>' + data.error + '</p>';
-                } else {
-                    document.getElementById('predictionResult').innerHTML = 
-                        '<h3>🎯 Prediction: ' + data.zone_type.toUpperCase() + ' probability</h3>' +
-                        '<p><strong>Confidence:</strong> ' + data.confidence + '</p>' +
-                        '<p><strong>Recommendation:</strong> ' + data.recommendation + '</p>' +
-                        '<p><strong>Location:</strong> ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + '</p>';
-                }
-            });
-        });
-
-        function refreshZones() {
-            loadFishingZones();
-            alert('Fishing zones updated!');
-        }
-
-        function locateBestZone() {
-            if (fishingZones.length > 0) {
-                var bestZone = fishingZones.reduce(function(prev, current) {
-                    return (prev.probability > current.probability) ? prev : current;
-                });
-                map.setView([bestZone.lat, bestZone.lon], 8);
-                alert('Best fishing spot: ' + bestZone.probability + '% probability');
-            }
-        }
-
-        function updateOceanData() {
-            fetch('/update_data')
-                .then(function(response) { return response.json(); })
-                .then(function(data) {
-                    if (data.status === 'success') {
-                        alert('✅ Ocean data updated from satellites!\nNew temperature: ' + 
-                              data.data.sea_temperature + '°C');
-                        location.reload();
-                    }
-                });
-        }
-
-        // Initial load
-        loadFishingZones();
-    </script>
+  <script src="main.js"></script>
 </body>
 </html>
